@@ -57,6 +57,29 @@ def draw(win, board, width, height, player_string):
         for j in range(3):
             draw_cell(win, i, j, board, width, height, player_string)
 
+def draw_window_selection_screen(win, board, width, height, selected):
+    win.fill((255,255,255))
+    # Draw player
+    fnt = pygame.font.SysFont("comicsans", 40)
+    text = fnt.render("Player Selection: ", 1, (0,0,0))
+    win.blit(text, (10, height-text.get_height()-12.5))
+
+    fnt = pygame.font.SysFont("comicsans", 60)
+    text_X = fnt.render("X", 1, player_color(1))
+    win.blit(text_X, (text.get_width()+50, height-text.get_height()-30))
+    text_O = fnt.render("O", 1, player_color(-1))
+    win.blit(text_O, (text.get_width()+text_X.get_width()+100, height-text.get_height()-30))
+
+    fnt = pygame.font.SysFont("comicsans", 20)
+    text_choose = fnt.render("(Click to choose)", 1, (0,0,0))
+    win.blit(text_choose, (width-10-text_choose.get_width(), height-text.get_height()-5))
+
+    # Draw grid and board
+    draw(win, board, width, height, "") # as the board is still empty, we don't care about the player_string parameter
+
+    # Draw square around the selected cell
+    draw_selected_cell(win, selected, width)
+
 def redraw_window(win, board, width, height, player, player_string, selected):
     win.fill((255,255,255))
     # Draw player
@@ -73,7 +96,7 @@ def redraw_window(win, board, width, height, player, player_string, selected):
     draw_selected_cell(win, selected, width)
 
     #Draw lines to show the winner
-    draw_winner(win, board, width)
+    draw_winner(win, board, width, height)
 
 def click_square(mouse_pos, selected, width, height, board, player):
     gap = width / 3
@@ -96,9 +119,29 @@ def click_square(mouse_pos, selected, width, height, board, player):
             selected[1] = x
             return False
 
-def draw_winner(win, board, width):
+def player_selection(mouse_pos, width, height):
+
+    fnt = pygame.font.SysFont("comicsans", 40)
+    text = fnt.render("Player Selection: ", 1, (0,0,0))
+    text_X = fnt.render("X", 1, player_color(1))
+    text_O = fnt.render("O", 1, player_color(-1))
+
+    x = mouse_pos[0]
+    y = mouse_pos[1]
+    if height-text.get_height()-30-text.get_height() <= y and y <= height:
+        if text.get_width()+40 <= x and x <= text.get_width()+50+text_X.get_width()+30:
+            return 1
+        if text.get_width()+50+text_X.get_width()+50 < x and x <= text.get_width()+50+text_X.get_width()+50+text_O.get_width()+30:
+            return -1
+    return 0
+
+def draw_winner(win, board, width, height):
     gap = width / 3
     if board.winningMove != None:
+        fnt = pygame.font.SysFont("comicsans", 40)
+        text = fnt.render(f"Player {board.display_player_name(board.gameState)} wins!", 1, (0,0,0))
+        win.blit(text, (width - text.get_width()-10, height-text.get_height()-15))
+
         (i, j), dir = board.winningMove
         color = winning_color(board.gameState)
         if dir == direction.ROW:
@@ -113,7 +156,10 @@ def draw_winner(win, board, width):
         if dir == direction.DIAG_BOTTOM_TOP:
             pygame.draw.line(win, color, (width - gap/2, gap/2), 
                                            (gap / 2, width - gap / 2), 6)
-
+    elif board.nbMovesPlayed == 9:
+        fnt = pygame.font.SysFont("comicsans", 40)
+        text = fnt.render(f"Draw Game", 1, (0,0,0))
+        win.blit(text, (width - text.get_width()-10, height-text.get_height()-15))
 
 
 def main():
@@ -127,15 +173,33 @@ def main():
     boardInitialized = False
 
     while run:
-        if not boardInitialized:
+        while run and not boardInitialized:
             board = Board()
-
-            player = 1
-            player_string = "X" if player == 1 else "O"
-            opponent = -1
-
+            player = 0
             selected = [-1, -1]
-            boardInitialized = True
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    player = player_selection(mouse_pos, width, height)
+
+                            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+            draw_window_selection_screen(win, board, width, height, selected)
+            pygame.display.update()
+
+            if player != 0:
+                player_string = "X" if player == 1 else "O"
+                opponent = -1 if player == 1 else 1
+                boardInitialized = True
+
+        ## player selection is over, now we play
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
