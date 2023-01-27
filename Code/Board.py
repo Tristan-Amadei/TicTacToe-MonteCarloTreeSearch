@@ -19,9 +19,8 @@ class Board:
 
     def __init__(self):
         self.grid = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        self.lastPlayerToPlay = 0
+        self.moves = []
         self.gameState = 0
-        self.nbMovesPlayed = 0
         self.winningMove = None
 
     def display_cell(self, i, j):
@@ -53,7 +52,7 @@ class Board:
     def updateGameState(self, i, j, player):
         #i, j stand for the coordinates of the last move played 
         #player is the player that played the last move
-        if self.nbMovesPlayed == 9 or self.gameState != 0:
+        if len(self.moves) == 9 or self.gameState != 0:
             pass
         else:
             #check if the player has won on the row
@@ -96,17 +95,28 @@ class Board:
         return (self.grid[0][2] == self.grid[1][1] == self.grid[2][0] == player, 2)
 
     def play(self, i, j, player):
-        if self.gameState != 0 or self.nbMovesPlayed >= 9:
+        if self.gameState != 0 or len(self.moves) >= 9:
             text = "The game is a draw." if self.gameState == 0 else f"Player {self.display_player_name(self.gameState)} has won."
             raise Exception(text)
         elif self.grid[i][j] == 0:
-            if self.lastPlayerToPlay == player:
+            if len(self.moves) != 0 and self.moves[-1][2] == player:
                 players_turn = 1 if player == -1 else -1
                 raise Exception(f"It's player {self.display_player_name(players_turn)}'s turn to play.")
             else:
                 self.grid[i][j] = player
-                self.lastPlayerToPlay = player
-                self.nbMovesPlayed += 1
+                self.moves.append((i, j, player))
                 self.updateGameState(i, j, player)
         else:
             raise Exception(f"Cell [{i}, {j}] is not empty.")
+        
+    def undo_last_move(self, return_move=False):
+        if len(self.moves) == 0:
+            return
+        
+        (i, j, player) = self.moves.pop()
+        self.grid[i][j] = 0
+        self.gameState = 0 #undoing the last move necessarily makes it so that the game cannot be over
+        self.winningMove = None
+        
+        if return_move:
+            return (i, j, player)

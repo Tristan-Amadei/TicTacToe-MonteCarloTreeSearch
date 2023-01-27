@@ -96,7 +96,7 @@ def redraw_window(win, board, width, height, player, player_string, selected):
     draw_selected_cell(win, selected, width)
 
     #Draw lines to show the winner
-    draw_winner(win, board, width, height)
+    #draw_winner(win, board, width, height)
 
 def click_square(mouse_pos, selected, width, height, board, player):
     gap = width / 3
@@ -156,7 +156,7 @@ def draw_winner(win, board, width, height):
         if dir == direction.DIAG_BOTTOM_TOP:
             pygame.draw.line(win, color, (width - gap/2, gap/2), 
                                            (gap / 2, width - gap / 2), 6)
-    elif board.nbMovesPlayed == 9:
+    elif len(board.moves) == 9:
         fnt = pygame.font.SysFont("comicsans", 40)
         text = fnt.render(f"Draw Game", 1, (0,0,0))
         win.blit(text, (width - text.get_width()-10, height-text.get_height()-15))
@@ -209,8 +209,16 @@ def main():
                 mouse_pos = pygame.mouse.get_pos()
                 move_was_played = click_square(mouse_pos, selected, width, height, board, player)
                 if move_was_played:
-                    thread = Thread(target=play_random, args=(board, opponent, 0.5))
-                    thread.start()               
+                    #thread = Thread(target=play_random, args=(board, opponent, 0.5))
+                    thread = Thread(target=play_minimax, args=(board, opponent, 0.5))
+                    thread.start()  
+                    
+                    
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    len_before = len(board.moves)
+                    board.undo_last_move()   
+                    print(f"len before = {len_before}, len now = {len(board.moves)}")       
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
