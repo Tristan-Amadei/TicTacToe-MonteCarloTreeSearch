@@ -1,4 +1,5 @@
 from enum import Enum
+from copy import deepcopy
 
 class direction(Enum):
     ROW = 1
@@ -22,6 +23,14 @@ class Board:
         self.moves = []
         self.gameState = 0
         self.winningMove = None
+        
+    def copy(self):
+        board_copy = Board()
+        board_copy.grid = deepcopy(self.grid)
+        board_copy.moves = deepcopy(self.moves)
+        board_copy.gameState = self.gameState    
+        board_copy.winningMove = self.winningMove    
+        return board_copy
 
     def display_cell(self, i, j):
         if self.grid[i][j] == 0:

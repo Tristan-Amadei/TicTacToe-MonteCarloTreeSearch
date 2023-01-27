@@ -96,7 +96,7 @@ def redraw_window(win, board, width, height, player, player_string, selected):
     draw_selected_cell(win, selected, width)
 
     #Draw lines to show the winner
-    #draw_winner(win, board, width, height)
+    draw_winner(win, board, width, height)
 
 def click_square(mouse_pos, selected, width, height, board, player):
     gap = width / 3
@@ -210,7 +210,7 @@ def main():
                 move_was_played = click_square(mouse_pos, selected, width, height, board, player)
                 if move_was_played:
                     #thread = Thread(target=play_random, args=(board, opponent, 0.5))
-                    thread = Thread(target=play_minimax, args=(board, opponent, 0.5))
+                    thread = Thread(target=play_minimax, args=(board, opponent, 0.5, True))
                     thread.start()  
                     
                     

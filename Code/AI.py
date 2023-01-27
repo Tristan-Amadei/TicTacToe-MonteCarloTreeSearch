@@ -67,18 +67,37 @@ def minimax_player2(board):
         board.undo_last_move()
     return min_score, best_move
 
-def play_minimax(board, player, sleep_before=0):
+def play_minimax(board, player, sleep_before=0, search_on_copy=False):
     time.sleep(sleep_before)
     
     if board.gameState != 0 or len(board.moves) >= 9:
         return
     
-    if player == 1:
-        _, (i, j) = minimax_player1(board)
+    if search_on_copy:
+        board_copy = board.copy() # we search the best move on a copy to avoid seeing some moves being played and removes on the gui
+        board_to_search_on = board_copy
     else:
-        _, (i, j) = minimax_player2(board)
+        board_to_search_on = board
+        
+    if player == 1:
+        _, (i, j) = minimax_player1(board_to_search_on)
+    else:
+        _, (i, j) = minimax_player2(board_to_search_on)
         
     try:
         board.play(i, j, player)
     except:
         pass 
+
+'''
+b = Board()
+player = 1
+while len(b.moves) < 9:
+    play_minimax(b, player)
+    b.display(True)
+    time.sleep(4)
+    
+    if player == 1:
+        player = -1
+    else:
+        player = 1 '''
