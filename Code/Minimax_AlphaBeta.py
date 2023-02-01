@@ -25,11 +25,11 @@ def back_to_start_state(board, nb_moves_beginning):
         board.undo_last_move()
 
 def board_score(board):
-    return 10 * board.gameState
+    return (10 - len(board.moves)) * board.gameState
 
 def minimax_player1(board):    
-    if len(board.moves) == 9:
-        return board_score(board)
+    if len(board.moves) == 9 or board.gameState != 0:
+        return board_score(board), (-1, -1) #the game is over at this point, thus the move returned is just to fit the format returned by other calls, it won't ever be read
     
     nb_moves_beginning = len(board.moves)
     max_score = -10 #we'll try to maximize the score
@@ -51,8 +51,8 @@ def minimax_player1(board):
     return max_score, best_move
 
 def minimax_player2(board):
-    if len(board.moves) == 9:
-        return board_score(board)
+    if len(board.moves) == 9 or board.gameState != 0:
+        return board_score(board), (-1, -1)
     
     nb_moves_beginning = len(board.moves)
     min_score = +10 #we'll try to minimize the score
@@ -98,8 +98,8 @@ def play_minimax(board, player, sleep_before=0, search_on_copy=False):
 ### Alpha-Beta ###
 
 def alphaBeta_player1(board, alpha, beta):    
-    if len(board.moves) == 9:
-        return board_score(board)
+    if len(board.moves) == 9 or board.gameState != 0:
+        return board_score(board), (-1, -1)
     
     nb_moves_beginning = len(board.moves)
     best_move = None
@@ -125,8 +125,8 @@ def alphaBeta_player1(board, alpha, beta):
     return alpha, best_move
 
 def alphaBeta_player2(board, alpha, beta):
-    if len(board.moves) == 9:
-        return board_score(board)
+    if len(board.moves) == 9 or board.gameState != 0:
+        return board_score(board), (-1, -1)
     
     nb_moves_beginning = len(board.moves)
     best_move = None
@@ -172,3 +172,4 @@ def play_alphaBeta(board, player, sleep_before=0, search_on_copy=False):
         board.play(i, j, player)
     except:
         pass 
+    

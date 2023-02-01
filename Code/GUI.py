@@ -1,6 +1,6 @@
 import pygame
 from Board import Board, direction
-from AI import *
+from Minimax_AlphaBeta import *
 from threading import Thread
 
 pygame.font.init()
