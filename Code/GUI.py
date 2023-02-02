@@ -213,7 +213,7 @@ def main():
                     #thread = Thread(target=play_random, args=(board, opponent, 0.5))
                     #thread = Thread(target=play_minimax, args=(board, opponent, 0.5, True))
                     #thread = Thread(target=play_alphaBeta, args=(board, opponent, 0.5, True))
-                    thread = Thread(target=play_mcts, args=(board, opponent, 5000))
+                    thread = Thread(target=play_mcts, args=(board, opponent, 2000))
                     thread.start()  
                     
             if event.type == pygame.KEYDOWN:

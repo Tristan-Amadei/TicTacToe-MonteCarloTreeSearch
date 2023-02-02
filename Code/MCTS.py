@@ -27,7 +27,7 @@ class Node:
         self.visits += 1
             
     def calculate_parents_visits(self):
-        total_parents_visits = 0
+        total_parents_visits = 1
         for parent in self.parents:
             total_parents_visits += parent.visits
         return total_parents_visits
@@ -187,12 +187,3 @@ def play_mcts(board, player, nb_simulations, c = 2**(1/2)):
     (i, j, _) = choose_node_winrate(board, player, dic_nodes_visited)
     board.play(i, j, player)
     return dic_nodes_visited
-    
-
-
-b = Board()
-b.play(0, 0, 1)
-b.play(1, 1, -1)
-
-d = play_mcts(b, 1, 2, c = 4)
-print('done')
