@@ -212,12 +212,8 @@ def main():
                 if move_was_played and not board.isGameOver():
                     #thread = Thread(target=play_random, args=(board, opponent, 0.5))
                     #thread = Thread(target=play_minimax, args=(board, opponent, 0.5, True))
-<<<<<<< HEAD
                     #thread = Thread(target=play_alphaBeta, args=(board, opponent, 0.5, True))
                     thread = Thread(target=play_mcts, args=(board, opponent, 5000))
-=======
-                    thread = Thread(target=play_alphaBeta, args=(board, opponent, 0.5, True))
->>>>>>> bd65c89a41f5b09a69863097e39f0d821492124a
                     thread.start()  
                     
             if event.type == pygame.KEYDOWN:

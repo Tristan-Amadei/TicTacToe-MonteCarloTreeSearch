@@ -130,7 +130,6 @@ class Board:
         if return_move:
             return (i, j, player)
         
-<<<<<<< HEAD
     def get_square_representation(self, i, j):
         if self.grid[i][j] == 0:
             return '*'
@@ -138,17 +137,11 @@ class Board:
             return 'X'
         return 'O'
         
-=======
->>>>>>> bd65c89a41f5b09a69863097e39f0d821492124a
     def get_representation(self):
         representation = ''
         for i in range(3):
             for j in range(3):
-<<<<<<< HEAD
                 representation += self.get_square_representation(i, j)
-=======
-                representation += str(self.grid[i][j])
->>>>>>> bd65c89a41f5b09a69863097e39f0d821492124a
         return representation
     
     def isGameOver(self):
