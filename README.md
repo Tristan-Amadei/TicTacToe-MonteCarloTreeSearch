@@ -10,4 +10,4 @@ I implemented different approaches to code the opponent:
 
 </br>
 I also added a GUI using pygame. The player can play with either the Xs or the Os, and the AI will take the others automatically. 
-![gui](/assets/images/gui.png)
+![gui](https://myoctocat.com/assets/images/base-octocat.svg)
