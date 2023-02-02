@@ -1,7 +1,8 @@
 import pygame
 from Board import Board, direction
-from AI import *
+from Minimax_AlphaBeta import *
 from threading import Thread
+from MCTS import play_mcts
 
 pygame.font.init()
 pygame.init()
@@ -208,17 +209,16 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 move_was_played = click_square(mouse_pos, selected, width, height, board, player)
-                if move_was_played:
+                if move_was_played and not board.isGameOver():
                     #thread = Thread(target=play_random, args=(board, opponent, 0.5))
-                    thread = Thread(target=play_minimax, args=(board, opponent, 0.5, True))
+                    #thread = Thread(target=play_minimax, args=(board, opponent, 0.5, True))
+                    #thread = Thread(target=play_alphaBeta, args=(board, opponent, 0.5, True))
+                    thread = Thread(target=play_mcts, args=(board, opponent, 5000))
                     thread.start()  
-                    
                     
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    len_before = len(board.moves)
                     board.undo_last_move()   
-                    print(f"len before = {len_before}, len now = {len(board.moves)}")       
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

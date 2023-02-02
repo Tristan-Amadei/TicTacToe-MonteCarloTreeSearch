@@ -129,3 +129,20 @@ class Board:
         
         if return_move:
             return (i, j, player)
+        
+    def get_square_representation(self, i, j):
+        if self.grid[i][j] == 0:
+            return '*'
+        if self.grid[i][j] == 1:
+            return 'X'
+        return 'O'
+        
+    def get_representation(self):
+        representation = ''
+        for i in range(3):
+            for j in range(3):
+                representation += self.get_square_representation(i, j)
+        return representation
+    
+    def isGameOver(self):
+        return self.gameState != 0 or (self.gameState == 0 and len(self.moves) >= 9)
