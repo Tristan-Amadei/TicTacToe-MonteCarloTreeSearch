@@ -102,6 +102,10 @@ def redraw_window(win, board, width, height, player, player_string, selected, en
     #display the text reading that the engine is running
     if engine:
         draw_engine_search_text(win, width, height)
+        
+    #display a text explaining how to make a move, only displaying it when no move has been played
+    if len(board.moves) == 0:
+        draw_instruction_text(win, width, height)
 
 def click_square(mouse_pos, selected, width, height, board, player):
     gap = width / 3
@@ -169,6 +173,11 @@ def draw_winner(win, board, width, height):
 def draw_engine_search_text(win, width, height):
     fnt = pygame.font.SysFont("comicsans", 40)
     text = fnt.render("Engine running...", 1, (0,0,0))
+    win.blit(text, (width-10-text.get_width(), height-text.get_height()-5))
+    
+def draw_instruction_text(win, width, height):
+    fnt = pygame.font.SysFont("comicsans", 20)
+    text = fnt.render("To play, double-click on a square", 1, (0,0,0))
     win.blit(text, (width-10-text.get_width(), height-text.get_height()-5))
 
 
