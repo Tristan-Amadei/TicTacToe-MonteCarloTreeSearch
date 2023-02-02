@@ -9,5 +9,6 @@ I implemented different approaches to code the opponent:
 - Monte-Carlo Tree Search
 
 </br>
-I also added a GUI using pygame. The player can play with either the Xs or the Os, and the AI will take the others automatically. 
-![gui](https://myoctocat.com/assets/images/base-octocat.svg)
+I also added a GUI using pygame. The player can play with either the Xs or the Os, and the AI will take the others automatically. </br>
+![ezcv logo](/assets/images/gui.png)
+![gui](https://user-images.githubusercontent.com/81379077/216456793-cba50c9e-58cc-4099-ba64-79861474c53d.png)
