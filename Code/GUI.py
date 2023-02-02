@@ -81,7 +81,7 @@ def draw_window_selection_screen(win, board, width, height, selected):
     # Draw square around the selected cell
     draw_selected_cell(win, selected, width)
 
-def redraw_window(win, board, width, height, player, player_string, selected):
+def redraw_window(win, board, width, height, player, player_string, selected, engine):
     win.fill((255,255,255))
     # Draw player
     fnt = pygame.font.SysFont("comicsans", 40)
@@ -98,6 +98,10 @@ def redraw_window(win, board, width, height, player, player_string, selected):
 
     #Draw lines to show the winner
     draw_winner(win, board, width, height)
+    
+    #display the text reading that the engine is running
+    if engine:
+        draw_engine_search_text(win, width, height)
 
 def click_square(mouse_pos, selected, width, height, board, player):
     gap = width / 3
@@ -161,6 +165,11 @@ def draw_winner(win, board, width, height):
         fnt = pygame.font.SysFont("comicsans", 40)
         text = fnt.render(f"Draw Game", 1, (0,0,0))
         win.blit(text, (width - text.get_width()-10, height-text.get_height()-15))
+        
+def draw_engine_search_text(win, width, height):
+    fnt = pygame.font.SysFont("comicsans", 40)
+    text = fnt.render("Engine running...", 1, (0,0,0))
+    win.blit(text, (width-10-text.get_width(), height-text.get_height()-5))
 
 
 def main():
@@ -172,6 +181,7 @@ def main():
 
     run = True
     boardInitialized = False
+    engine_running = False
 
     while run:
         while run and not boardInitialized:
@@ -210,10 +220,13 @@ def main():
                 mouse_pos = pygame.mouse.get_pos()
                 move_was_played = click_square(mouse_pos, selected, width, height, board, player)
                 if move_was_played and not board.isGameOver():
+                    engine_running = True
+                    
                     #thread = Thread(target=play_random, args=(board, opponent, 0.5))
                     #thread = Thread(target=play_minimax, args=(board, opponent, 0.5, True))
                     #thread = Thread(target=play_alphaBeta, args=(board, opponent, 0.5, True))
                     thread = Thread(target=play_mcts, args=(board, opponent, 2000))
+                    
                     thread.start()  
                     
             if event.type == pygame.KEYDOWN:
@@ -223,8 +236,13 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
-        redraw_window(win, board, width, height, player, player_string, selected)
+                
+        try:
+            engine_running = thread.is_alive()
+        except:
+            engine_running = False
+            
+        redraw_window(win, board, width, height, player, player_string, selected, engine_running)
         pygame.display.update()
 
 main()

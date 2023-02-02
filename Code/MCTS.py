@@ -36,13 +36,14 @@ class Node:
         if self.visits == 0:
             return 0
         
-        return (self.wins + self.draws) / self.visits
+        return (self.wins + 0.5*self.draws) / self.visits #we count the draws in the winrate because, under best play, a draw is the best result one can get
+                                                          #however, we give less weight to the draw because we want out engine to favor positions where it wins
             
     def calculate_uct(self, c):
         if self.visits == 0:
             return float('inf')
         
-        winrate = (self.wins + self.draws) / self.visits #we count a draw as a win because, under best play, a draw is the best result one can get
+        winrate = (self.wins + 0.5*self.draws) / self.visits 
         
         parents_visits = self.calculate_parents_visits()
         exploration = c * (log(parents_visits) / self.visits)**(1/2)

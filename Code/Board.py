@@ -61,7 +61,7 @@ class Board:
     def updateGameState(self, i, j, player):
         #i, j stand for the coordinates of the last move played 
         #player is the player that played the last move
-        if len(self.moves) == 9 or self.gameState != 0:
+        if len(self.moves) > 9 or self.gameState != 0:
             pass
         else:
             #check if the player has won on the row
